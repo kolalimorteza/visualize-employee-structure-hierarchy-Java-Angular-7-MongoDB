@@ -1,0 +1,74 @@
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<div class="line-to"></div>
+<div id="tree-node-{{node.guid}}" [ngClass]="{'tree-element-container': !0, 'tree-element-has-children': node.hasChildren()}"
+    [style.width.px]="node.width" [style.height.px]="node.height">
+    <div [ngClass]="{
+        'tree-element-main': !0,
+        'dragover': node.isDragover,
+        'expanded': node.isExpanded,
+        'dragging': node.isDragging,
+        'tree-new-node': node.isMaker
+        }"
+        [attr.draggable]="node.isMaker ? null : 'true'" [style.width.px]="node.width" [style.height.px]="node.height"
+        (drop)="node.drop($event)" (dragenter)="node.dragenter($event)" (dragstart)="node.dragstart($event)" (dragover)="node.dragover($event)"
+        (dragend)="node.dragend($event)" (dragleave)="node.dragleave($event)">
+
+
+        <div class="rect" [style.width.px]="node.width" [style.height.px]="node.height">
+            <div class="buttons">
+                <div title="delete node" class="delete" (click)="node.destroy()"></div>
+                <div title="view childs" class="toggler" (click)="node.toggle()"></div>
+                <div title="add new node" class="add" (click)="node.addChild()"></div>
+                <div title="update current node" class="update" (click)="node.update(this.node)"></div>
+                <div title="update All Hierarchy" class="updateAll" (click)="node.updateAll()"></div>
+            </div>
+            <div class="tree-text">
+                <div class="container">
+                    <div class="row">
+                        <div class="well well-sm">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-4">
+                                    <!-- <img src="assets/image/TallinkLogo.jpg" alt="" class="img-rounded img-responsive" /> -->
+                                    <img src="/assets/image/TallinkLogo.jpg" alt="" class="img-rounded img-responsive" />
+                                </div>
+                                <div class="col-sm-6 col-md-8">
+                                    <h4 #disaplyName contenteditable [innerHtml]="node.displayName" (blur)="node.displayName=$event.srcElement.innerText"
+                                        class="tree-text tree-text-editable"></h4>
+                                    <small>
+                                        <cite title="{{node.city}},{{node.address}}"> <span #city contenteditable
+                                                [innerHtml]="node.city" (blur)="node.city=$event.srcElement.innerText"
+                                                class="tree-text tree-text-editable"> </span>,
+                                            <span contenteditable #address [innerHtml]="node.address" (blur)="node.address=$event.srcElement.innerText"
+                                                class="tree-text tree-text-editable"></span><i class="glyphicon glyphicon-map-marker">
+                                            </i>
+                                        </cite>
+                                    </small>
+                                    <p>
+                                        <i class="glyphicon glyphicon-globe"></i><span #companyName contenteditable
+                                            [innerHtml]="node.companyName" (blur)="node.companyName=$event.srcElement.innerText"
+                                            class="tree-text tree-text-editable"></span>
+                                        <br />
+                                        <i class="glyphicon glyphicon-gift"></i><span #role contenteditable [innerHtml]="node.role"
+                                            (blur)="node.role=$event.srcElement.innerText" class="tree-text tree-text-editable"></span>
+                                        <br />
+                                        <span *ngIf="node.sign" class="canSign">Can Sign</span>
+                                        
+                                    </p>
+
+                                    <!-- Split button -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tree-children" [style.transform]="childrenTransform" *ngIf="node.isExpanded">
+        <div class="tree-elements-group">
+            <div *ngFor="let child of node.children" [treeDiagramNode]="child" class="tree-node tree-child"></div>
+        </div>
+    </div>
+</div>
