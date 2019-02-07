@@ -25,7 +25,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
 	}
 
 	public List<Employee> getEmployeesByName(String employeeName) {
-		return employeeRepository.findByEmployeeName(employeeName);
+		return employeeRepository.findByDisplayName(employeeName);
 	}
 
 	public List<Employee> getHierarchyByGuid(String guid) {

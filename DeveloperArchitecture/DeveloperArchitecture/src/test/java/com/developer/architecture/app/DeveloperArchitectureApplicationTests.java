@@ -22,6 +22,7 @@ import com.developer.architecture.app.repository.EmployeeRepository;
 import com.developer.architecture.app.services.EmployeeServiceImpl;
 import com.developer.architecture.app.services.IEmployeeService;
 
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class DeveloperArchitectureApplicationTests {
@@ -48,7 +49,7 @@ public class DeveloperArchitectureApplicationTests {
 
 		employees.add(employeeAlex);
 
-		Mockito.when(employeeRepository.findByEmployeeName(employeeAlex.getDisplayName())).thenReturn(employees);
+		Mockito.when(employeeRepository.findByDisplayName(employeeAlex.getDisplayName())).thenReturn(employees);
 
 	}
 

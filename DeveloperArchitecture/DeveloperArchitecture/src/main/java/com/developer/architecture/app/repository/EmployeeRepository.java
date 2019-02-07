@@ -11,7 +11,7 @@ import com.developer.architecture.app.domain.Employee;
 @Repository
 public interface EmployeeRepository extends MongoRepository<Employee, Long> {
 	
-    public List<Employee> findByEmployeeName(String employeeName);
+    public List<Employee> findByDisplayName(String employeeName);
     
     @Query("{'children.0': {$exists: false}}")
     public List<Employee> findAllPossibleParent();
