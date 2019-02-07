@@ -11,9 +11,12 @@ import {TreeDiagramNodeMaker} from '../classes/node-maker.class';
     templateUrl: './node.component.html',
 })
 export class NodeComponent {
+    
     public node: TreeDiagramNode | TreeDiagramNodeMaker;
     public childrenTransform;
+
     constructor(private nodesSrv: NodesListService, private sanitizer: DomSanitizer) {
+
     }
 
     @Input() set treeDiagramNode(guid) {

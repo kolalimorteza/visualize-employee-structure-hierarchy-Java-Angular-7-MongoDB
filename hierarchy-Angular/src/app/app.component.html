@@ -1,6 +1,7 @@
 <ul>
     <li>
-        <input type="text" (keyup)="onTextChange($event)">
+        <input style="float:left" type="text" #searchBox> <button style="float:left" type="submit" (click) = 'onTextChange(searchBox.value)'>Search</button>
+        
     </li>
 </ul>
 <tree-diagram [data]='tree'></tree-diagram>

@@ -1,5 +1,7 @@
 import { TreeDiagramNode } from './node.class';
 export class TreeDiagramNodeMaker extends TreeDiagramNode {
+
+    public isMaker = true;
     public drop(event) {
         event.preventDefault();
         const guid = this.getThisNodeList().draggingNodeGuid;

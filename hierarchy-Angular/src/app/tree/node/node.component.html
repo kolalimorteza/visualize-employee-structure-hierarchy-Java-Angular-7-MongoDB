@@ -2,7 +2,7 @@
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <div class="line-to"></div>
-<div id="tree-node-{{node.guid}}" [ngClass]="{'tree-element-container': !0, 'tree-element-has-children': node.hasChildren()}"
+<div id="tree-node-{{node.guid}}" [ngClass]="{'tree-element-container': !0, 'tree-element-has-children': node.hasChildren()}" *ngIf = "node.guid != null"
     [style.width.px]="node.width" [style.height.px]="node.height">
     <div [ngClass]="{
         'tree-element-main': !0,
@@ -14,7 +14,6 @@
         [attr.draggable]="node.isMaker ? null : 'true'" [style.width.px]="node.width" [style.height.px]="node.height"
         (drop)="node.drop($event)" (dragenter)="node.dragenter($event)" (dragstart)="node.dragstart($event)" (dragover)="node.dragover($event)"
         (dragend)="node.dragend($event)" (dragleave)="node.dragleave($event)">
-
 
         <div class="rect" [style.width.px]="node.width" [style.height.px]="node.height">
             <div class="buttons">

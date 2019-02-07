@@ -22,38 +22,71 @@ export class TreeDiagramNodesList {
         parentId: null
     };
 
-    constructor(_nodes: any[], private config, private _httpClient, private dataService) {
+    public node = {
+        guid: this.makerGuid,
+        parentId: 'root',
+        children: [],
+        email: 'dummy@gmail.com',
+        address: 'address goes here',
+        companyName: 'company name',
+        city: 'city',
+        role: 'role',
+        sign: false,
+        displayName: 'New node'
+    };
 
+    constructor(_nodes: any[], private config, private _httpClient, private dataService) {
         _nodes.forEach(_node => {
             this._nodesList.set(_node.guid, new TreeDiagramNode(_node, config, this.getThisNodeList.bind(this)));
         });
         this._makeRoots();
-
         this.makerGuid = this.uuidv4();
-        const node = {
-            guid: this.makerGuid,
-            parentId: 'root',
-            children: [],
-            email: 'dummy@gmail.com',
-            address: 'address goes here',
-            companyName: 'company name',
-            city: 'city',
-            role: 'role',
-            sign: false,
-            displayName: 'New node'
-        };
-        const maker = new TreeDiagramNodeMaker(node, this.config, this.getThisNodeList.bind(this));
+        const maker = new TreeDiagramNodeMaker(this.node, this.config, this.getThisNodeList.bind(this));
         this._nodesList.set(this.makerGuid, maker);
         this.dataService.currentMessage.subscribe(message => {
             console.log('subscribed ' + message);
-            this._nodesList.forEach((data) => {
-                if (data.displayName === message) {
-                    console.log('node found ' + data._toggle);
-                    data._toggle = true;
-                    this.toggleSiblings(data.guid);
-                }
-            });
+            this.populate(message);
         });
+
+    }
+    public populate(message: any) {
+        this.dataService.getEmployeesByName(message).then((empResult) => {
+            {
+                console.log(empResult['data']);
+                if (empResult['data']) {
+                    const data = empResult['data'][0];
+                    this._nodesList = new Map();
+                    this.dataService.getNodeHierarchy(data.guid).then((result) => {
+                        const _nodes = result['data'];
+                        _nodes.forEach(_node => {
+                            if (_node.parentId != null && _node.guid === data.guid) {
+                                console.log('parent set to blank');
+                                _node.parentId = null;
+                            }
+                            this._nodesList.set(_node.guid, new TreeDiagramNode(_node, this.config, this.getThisNodeList.bind(this)));
+                        });
+                        this._makeRoots();
+                        this.makerGuid = this.uuidv4();
+                        const maker = new TreeDiagramNodeMaker(this.node, this.config, this.getThisNodeList.bind(this));
+                        this._nodesList.set(this.makerGuid, maker);
+                    });
+                } else {
+                    this._nodesList = new Map();
+                    this.dataService.getAllEmployees().then((result) => {
+                        const _nodes = result['data'];
+                        this._nodesList = new Map();
+                        _nodes.forEach(_node => {
+                            this._nodesList.set(_node.guid, new TreeDiagramNode(_node, this.config, this.getThisNodeList.bind(this)));
+                        });
+                        this._makeRoots();
+                        this.makerGuid = this.uuidv4();
+                        const maker = new TreeDiagramNodeMaker(this.node, this.config, this.getThisNodeList.bind(this));
+                        this._nodesList.set(this.makerGuid, maker);
+                    });
+                }
+            }
+        });
+
     }
 
     public values() {
@@ -110,6 +143,7 @@ export class TreeDiagramNodesList {
 
     public toggleSiblings(guid: string) {
         const target = this.getNode(guid);
+
         if (target.parentId) {
             const parent = this.getNode(target.parentId);
             parent.children.forEach((nodeGuid) => {

@@ -32,18 +32,9 @@ export class AppComponent implements OnInit {
   }
   public searchText: any = 'Sajjan';
   public tree: any;
-  getAllEmployees(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this._httpClient.get(`/api/getAllEmployee`)
-        .subscribe((response: any) => {
-          resolve(response);
-        }, reject);
-    }
-    );
-  }
 
-  onTextChange(event: any) {
-    this.data.changeMessage(event.target.value);
+  onTextChange(searchBox) {
+    this.data.changeMessage(searchBox);
   }
 
   public ngOnInit(): void {
@@ -53,7 +44,7 @@ export class AppComponent implements OnInit {
       this.searchText = message;
     });
     console.log('ng on init called');
-    this.getAllEmployees().then((result) => {
+    this.data.getAllEmployees().then((result) => {
       let json: any;
       console.log(result);
       json = result['data'];
@@ -61,7 +52,7 @@ export class AppComponent implements OnInit {
         json: json,
         config: this.treeConfig
       };
-      this.tree['searchText'] = 'Deepak';
+      this.tree['searchText'] = this.searchText;
       console.log(this.tree);
     });
   }
